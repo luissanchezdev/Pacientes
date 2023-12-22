@@ -1,0 +1,10 @@
+export const enum NOTIFICATION_TYPES {
+    ERROR,
+    WARNING,
+    INFO,
+    SUCCESS,
+    NOSTRING,
+    EMPTYFIELD,
+    ERRORDATE,
+    ERROREMAIL
+}

@@ -1,10 +1,19 @@
 import './App.css'
+import Footer from './components/Footer'
+import Header from './components/Header'
+import Tabs from './components/ui/Tabs'
+
 
 function App() {
 
+
   return (
     <>
-      <h1 className=''>Gestion de pacientes</h1>
+      <Header />
+      <main className='container mx-auto flex flex-col justify-center items-center'>
+        <Tabs />
+      </main>
+      <Footer />
     </>
   )
 }
