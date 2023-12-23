@@ -1,67 +1,62 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { NOTIFICATION_TYPES } from '../constants/enums'
 import Notification from './ui/Notification'
+import { usePacientesContext } from '../hooks/PacientesProvider'
+import { TypeFormulario } from '../constants/types'
+import { regexString, regexDate, regexEmail } from '../constants/regexValidations'
 
-function Formulario() {
-  const [nombreMascota, setNombreMascota] = useState<string>('Minino')
-  const [nombrePropietario, setNombrePropietario] = useState<string>('Luis Sanchez')
-  const [correoPropietario, setCorreoPropietario] = useState<string>('example@example.com')
-  const [fecha, setFecha] = useState<string>('')
-  const [sintomas, setSintomas] = useState<string>('')
+const dataForDefault = {
+  id: '',
+  nombreMascota: '',
+  nombrePropietario: '',
+  correoElectronico: '',
+  fecha: '',
+  sintomas: ''
+}
+
+function Formulario({ modalState = false, dataPaciente = dataForDefault, handleShowModal } : TypeFormulario ) {
+  const { addPaciente, updatePaciente } = usePacientesContext()
+  const [nombreMascota, setNombreMascota] = useState<string>(dataPaciente.nombreMascota)
+  const [nombrePropietario, setNombrePropietario] = useState<string>(dataPaciente.nombrePropietario)
+  const [correoElectronico, setCorreoPropietario] = useState<string>(dataPaciente.correoElectronico)
+  const [fecha, setFecha] = useState<string>(dataPaciente.fecha)
+  const [sintomas, setSintomas] = useState<string>(dataPaciente.sintomas)
   const [notificationType, setNotificationType] = useState<NOTIFICATION_TYPES | null>(null)
 
-  const handleNombreMascota = (e : React.ChangeEvent<HTMLInputElement>) => {
-    setNombreMascota(e.target.value)
-  }
-
-  const handleNombrePropietario = (e : React.ChangeEvent<HTMLInputElement>) => {
-    setNombrePropietario(e.target.value)
-  }
-
-  const handleCorreoPropietario = (e : React.ChangeEvent<HTMLInputElement>) => {
-    setCorreoPropietario(e.target.value)
-  }
-
-  const handleFecha = (e : React.ChangeEvent<HTMLInputElement>) => {
-    setFecha(e.target.value)
-  }
-
-  const handleSintomas = (e : React.ChangeEvent<HTMLTextAreaElement>) => {
-    setSintomas(e.target.value)
+  const resetForm = () => {
+    setNombreMascota('')
+    setNombrePropietario('')
+    setCorreoPropietario('')
+    setFecha('')
+    setSintomas('')
   }
 
   const handleSubmit = (e : React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    let formData = new FormData(e.currentTarget)
-
-    let regexString = /\d/
-    let regexEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g
-    let regexDate = /\d{1,2}\-\d{1,2}\-\d{2,4}/g
-
-    if([nombreMascota, nombrePropietario, correoPropietario, fecha, sintomas].includes('')) {
+    if([nombreMascota, nombrePropietario, correoElectronico, fecha, sintomas].includes('')) {
       return setNotificationType(NOTIFICATION_TYPES.EMPTYFIELD)
     } 
 
-    if(regexString.test(nombreMascota)) {
-      console.log('nombreMascota no paso la validacion')
-      return setNotificationType(NOTIFICATION_TYPES.NOSTRING)
+    // Validaciones
+    regexString.test(nombreMascota) && setNotificationType(NOTIFICATION_TYPES.NOSTRING)
+
+    regexString.test(nombrePropietario) && setNotificationType(NOTIFICATION_TYPES.NOSTRING)
+
+    !regexEmail.test(correoElectronico) && setNotificationType(NOTIFICATION_TYPES.ERROREMAIL)
+
+    !regexDate.test(fecha) && setNotificationType(NOTIFICATION_TYPES.ERRORDATE)
+
+    const newPaciente = {
+      id: crypto.randomUUID(),
+      nombreMascota,
+      nombrePropietario,
+      correoElectronico,
+      fecha,
+      sintomas
     }
 
-    if(regexString.test(nombrePropietario)) {
-      console.log('nombrePropietario no paso la validacion')
-      return setNotificationType(NOTIFICATION_TYPES.NOSTRING)
-    }
-
-    if(!regexEmail.test(correoPropietario)) {
-      console.log('correoPropietario no paso la validacion')
-      return setNotificationType(NOTIFICATION_TYPES.ERROREMAIL)
-    }
-
-    if(!regexDate.test(fecha)) {
-      console.log('fecha no paso la validacion')
-      return setNotificationType(NOTIFICATION_TYPES.ERRORDATE)
-    }
+    addPaciente(newPaciente)
 
     setNotificationType(NOTIFICATION_TYPES.SUCCESS)
 
@@ -69,12 +64,17 @@ function Formulario() {
       setNotificationType(null)
     },5000)
 
-    setNombreMascota('')
-    setNombrePropietario('')
-    setCorreoPropietario('')
-    setFecha('')
-    setSintomas('')
+    resetForm()
   }
+
+  useEffect(() => {
+    setNombreMascota(dataPaciente?.nombreMascota)
+    setNombrePropietario(dataPaciente?.nombrePropietario)
+    setCorreoPropietario(dataPaciente?.correoElectronico)
+    setFecha(dataPaciente?.fecha)
+    setSintomas(dataPaciente?.sintomas)
+  }, [dataPaciente])
+
 
   return (
     <div className="w-full lg:max-w-[600px] py-5 mx-auto">
@@ -89,7 +89,7 @@ function Formulario() {
           placeholder="Minino" 
           className="input" 
           value={nombreMascota}
-          onChange={ e => handleNombreMascota(e)}
+          onChange={ (e) => setNombreMascota(e.target.value)}
           />
           
         <label htmlFor='nombre-propietario' className="label">Nombre Propietario</label>
@@ -100,7 +100,7 @@ function Formulario() {
           placeholder="Luis Sanchez" 
           className="input" 
           value={nombrePropietario}
-          onChange={ e => handleNombrePropietario(e)}
+          onChange={ e => setNombrePropietario(e.target.value)}
           />
         <label htmlFor='correo-propietario' className="label">Correo electrónico</label>
         <input 
@@ -109,8 +109,8 @@ function Formulario() {
           name='correo-propietario'
           placeholder="example@example.com" 
           className="input" 
-          value={correoPropietario}
-          onChange={ e => handleCorreoPropietario(e)}
+          value={correoElectronico}
+          onChange={ e => setCorreoPropietario(e.target.value)}
           />
         <label htmlFor='fecha' className="label">Fecha de alta</label>
         <input 
@@ -119,7 +119,7 @@ function Formulario() {
           name='fecha'
           className="input" 
           value={fecha}
-          onChange={ e => handleFecha(e)}
+          onChange={ e => setFecha(e.target.value)}
           />
         <label htmlFor="sintomas" className='label'>Sintomas</label>
         <textarea 
@@ -127,10 +127,40 @@ function Formulario() {
           name="sintomas"
           className="textarea"
           value={sintomas}
-          onChange={ e => handleSintomas(e)}
+          onChange={ e => setSintomas(e.target.value)}
         />
-        <input 
+        { !modalState && (
+          <input 
           type='submit' value='Añadir paciente' className="btn-submit" />
+        ) }
+        { modalState && (
+          <div className="paciente_actions">
+          <button 
+            type='button'
+            className="btn btn-edit"
+            onClick={() => {
+              updatePaciente(dataPaciente.id, {
+                id: dataPaciente.id,
+                nombreMascota: nombreMascota,
+                nombrePropietario: nombrePropietario,
+                correoElectronico: correoElectronico,
+                fecha: fecha,
+                sintomas: sintomas
+              })
+              resetForm()
+              handleShowModal()
+            }}
+          >Actualizar</button>
+          <button 
+            type='button'
+            className='btn btn-delete'
+            onClick={ () => {
+              resetForm()
+              handleShowModal()
+            } }
+          >Cancelar</button>
+        </div>
+        )}
       </form>
       { notificationType && <Notification notificationType={ notificationType } /> }
     </div>

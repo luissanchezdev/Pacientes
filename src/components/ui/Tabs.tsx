@@ -32,7 +32,9 @@ function Tabs() {
       </div>
       <div className='tabs_content'>
         { activeTab === 'seguimiento' ? 
-        <Formulario />
+        <Formulario 
+          handleShowModal={() => false }
+        />
         : 
         <ListaPacientes />
         }

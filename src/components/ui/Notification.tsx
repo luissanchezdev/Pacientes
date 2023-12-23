@@ -13,7 +13,7 @@ function Notification({ notificationType } : { notificationType : NOTIFICATION_T
 
       {notificationType === NOTIFICATION_TYPES.ERROREMAIL && <p className="notification text-red-500">El correo ingresado no es válido </p> }
 
-      {notificationType === NOTIFICATION_TYPES.SUCCESS && <p className="notification text-secondary">La cita se ha creado correctamente</p>}
+      {notificationType === NOTIFICATION_TYPES.SUCCESS && <p className="notification text-secondary">El paciente ha sido añadido exitosamente</p>}
     </>
   )
 }

@@ -1,11 +1,44 @@
-function Paciente() {
+import { TypePaciente } from "../constants/types"
+import { usePacientesContext } from "../hooks/PacientesProvider"
+import Formulario from "./Formulario"
+import Modal from "./ui/Modal"
+import { useState } from 'react'
+
+function Paciente( {paciente} : {paciente : TypePaciente}) {
+  const [modal, setModal] = useState(false)
+  const { deletePaciente } = usePacientesContext()
+  const { nombreMascota, nombrePropietario, correoElectronico, fecha, sintomas } = paciente
+
+  const handleShowModal = () => {
+    setModal(!modal)
+  }
+
   return (
     <div className="paciente">
-      <p className="paciente_data">Nombre Mascota: <span className="font-normal">Minino</span></p>
-      <p className="paciente_data">Nombre Propietario: <span className="font-normal">Luis Sanchez</span></p>
-      <p className="paciente_data">Correo electrónico: <span className="font-normal">example@example.com</span></p>
-      <p className="paciente_data">Fecha de alta: <span className="font-normal">20 de Diciembre</span></p>
-      <p className="paciente_data">Sintomas: <span className="font-normal">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Possimus eligendi aliquid voluptates, ab laudantium minima? Voluptatibus iste ratione quis? Nemo cumque, itaque sunt cupiditate laborum ipsa vel veniam sequi velit!</span></p>
+      <p className="paciente_data">Nombre Mascota: <span className="font-normal">{ nombreMascota }</span></p>
+      <p className="paciente_data">Nombre Propietario: <span className="font-normal">{ nombrePropietario }</span></p>
+      <p className="paciente_data">Correo electrónico: <span className="font-normal">{ correoElectronico }</span></p>
+      <p className="paciente_data">Fecha de alta: <span className="font-normal">{ fecha }</span></p>
+      <p className="paciente_data">Sintomas: <span className="font-normal">{ sintomas }</span></p>
+      <div className="paciente_actions">
+        <button 
+          className="btn btn-edit"
+          onClick={handleShowModal}  
+        >Editar</button>
+        <button 
+          className='btn btn-delete'
+          onClick={() => deletePaciente(paciente.id)} 
+        >Eliminar</button>
+      </div>
+     { modal && (
+      <Modal>
+        <Formulario 
+          modalState={ modal }
+          dataPaciente={ paciente }
+          handleShowModal={ handleShowModal }
+        />
+      </Modal>
+     ) }
     </div>
   )
 }
