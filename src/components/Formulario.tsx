@@ -40,13 +40,22 @@ function Formulario({ modalState = false, dataPaciente = dataForDefault, handleS
     } 
 
     // Validaciones
-    regexString.test(nombreMascota) && setNotificationType(NOTIFICATION_TYPES.NOSTRING)
+    if(regexString.test(nombreMascota)) { 
+      return setNotificationType(NOTIFICATION_TYPES.NOSTRING)
+    }
 
-    regexString.test(nombrePropietario) && setNotificationType(NOTIFICATION_TYPES.NOSTRING)
+    if(regexString.test(nombrePropietario)) {
+      return setNotificationType(NOTIFICATION_TYPES.NOSTRING)
+    }
 
-    !regexEmail.test(correoElectronico) && setNotificationType(NOTIFICATION_TYPES.ERROREMAIL)
-
-    !regexDate.test(fecha) && setNotificationType(NOTIFICATION_TYPES.ERRORDATE)
+    if(!regexEmail.test(correoElectronico)) {
+      return setNotificationType(NOTIFICATION_TYPES.ERROREMAIL)
+    }
+    /* 
+    if(!regexDate.test(fecha)) {
+      return setNotificationType(NOTIFICATION_TYPES.ERRORDATE)
+    }
+    */
 
     const newPaciente = {
       id: crypto.randomUUID(),
@@ -105,7 +114,7 @@ function Formulario({ modalState = false, dataPaciente = dataForDefault, handleS
           />
         <label htmlFor='correo-propietario' className="label">Correo electrónico</label>
         <input 
-          type='email' 
+          type='text' 
           id='correo-propietario' 
           name='correo-propietario'
           placeholder="example@example.com" 
