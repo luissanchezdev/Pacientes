@@ -4,14 +4,15 @@ import Notification from './ui/Notification'
 import { usePacientesContext } from '../hooks/PacientesProvider'
 import { TypeFormulario } from '../constants/types'
 import { regexString, regexDate, regexEmail } from '../constants/regexValidations'
+import { currentDate } from '../constants'
 
 const dataForDefault = {
-  id: '',
-  nombreMascota: '',
-  nombrePropietario: '',
-  correoElectronico: '',
-  fecha: '',
-  sintomas: ''
+  id: crypto.randomUUID(),
+  nombreMascota: 'Misifu',
+  nombrePropietario: 'Luis',
+  correoElectronico: 'luiss@example.com',
+  fecha: currentDate,
+  sintomas: 'Come mucho'
 }
 
 function Formulario({ modalState = false, dataPaciente = dataForDefault, handleShowModal } : TypeFormulario ) {

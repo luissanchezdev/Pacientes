@@ -7,7 +7,7 @@ function ListaPacientes() {
   const { pacientes } = usePacientesContext()
 
   return (
-    <div className="w-full lg:max-w-[600px] py-5 mx-auto">
+    <div className="w-full lg:max-w-[600px] py-5 mx-auto lg:h-full lg:overflow-y-scroll">
       <h2 className="text-black text-center text-2xl">
         { pacientes.length === 0 ? 'No hay pacientes' : `Lista de pacientes(${pacientes.length})`} 
 
