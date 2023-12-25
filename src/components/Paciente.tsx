@@ -1,4 +1,4 @@
-import { TypePaciente } from "../constants/types"
+import { TypePaciente } from "./types/types"
 import { usePacientesContext } from "../hooks/PacientesProvider"
 import Formulario from "./Formulario"
 import Modal from "./ui/Modal"

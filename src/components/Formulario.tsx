@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from 'react'
 import { NOTIFICATION_TYPES } from '../constants/enums'
 import Notification from './ui/Notification'
 import { usePacientesContext } from '../hooks/PacientesProvider'
-import { TypeFormulario } from '../constants/types'
+import { TypeFormulario } from './types/types'
 import { regexString, regexDate, regexEmail } from '../constants/regexValidations'
 import { currentDate } from '../constants'
 

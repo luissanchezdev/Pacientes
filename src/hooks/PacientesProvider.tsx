@@ -1,5 +1,5 @@
 import { useContext, createContext, useState } from 'react'
-import { TypePaciente } from '../constants/types';
+import { TypePaciente } from '../components/types/types';
 
 const pacientesContext = createContext({
   pacientes: [{
