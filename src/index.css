@@ -3,6 +3,19 @@
 @tailwind utilities;
 
 @layer components {
+    .header {
+        @apply flex flex-col md:flex-row justify-center items-center py-5 md:py-5 px-5 mb-5 md:mb-5 md:gap-5 bg-white w-full;
+    }
+
+    .header_logo {
+        @apply w-16 pb-5 md:pb-0;
+    }
+
+    .header_title {
+        @apply text-3xl font-bold text-center text-black;
+    }
+
+
     .form {
         @apply flex flex-col justify-center items-center px-4 py-4 bg-white rounded-md;
     }
@@ -39,6 +52,18 @@
         @apply py-2 px-2 lg:px-2 lg:py-2 border border-grayLight shadow-md rounded-md cursor-pointer text-lg bg-white hover:bg-secondary hover:text-white md:w-full xl:text-start xl:pl-5;
     }
 
+    .lista-pacientes {
+        @apply w-full lg:max-w-[600px] py-5 mx-auto lg:h-full lg:overflow-y-scroll;
+    }
+
+    .lista-pacientes_title {
+        @apply text-black text-center text-2xl;
+    }
+
+    .lista-pacientes_title {
+        @apply text-black text-center text-lg;
+    }
+
     .pacientes {
         @apply flex flex-col justify-center items-start py-5 px-2 md:px-4
     }
@@ -71,8 +96,16 @@
         @apply bg-red-500 hover:bg-red-700;
     }
 
-    .container-modal {
+    .modal {
         @apply bg-slate-900/50 w-full h-full fixed top-0 right-0 left-0 bottom-0 z-50;
+    }
+
+    .modal_container {
+        @apply w-[80%] h-[80%] mx-auto fixed z-50 bg-white top-0 right-0 bottom-0 left-0 mt-14 shadow-lg border-solid border-2 border-grayLight rounded-lg transition-all;
+    }
+
+    .footer {
+        @apply text-center py-2 text-gray-200;
     }
 }
 
